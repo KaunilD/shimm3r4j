@@ -9,7 +9,7 @@ import java.util.List;
 public class Preprocessing {
 
     // implementation of https://github.com/scipy/scipy/blob/v1.3.0/scipy/signal/signaltools.py#L2162-L2290
-    public static List<Double> resample(Double[] input, int targetNumSamples) {
+    public static List<Double> resample(float[] input, int targetNumSamples) {
         // copy input signal because FFT is in-place
         float[] inputCopy = new float[2*input.length];
         System.arraycopy(input, 0, inputCopy, 0, input.length);
@@ -95,6 +95,19 @@ public class Preprocessing {
         return phasicSignal;
     }
 
+    public static List<Double> getGSR(List<Double> data, long range_setting){
+        /*x
+            rf = [40200, 287000, 1000000, 3300000]
+         */
+        List<Double> result = new ArrayList<>();
+        for(Double dat: data){
+            result.add(
+              range_setting/(((dat*3.0/4095.0)/0.5)-1)
+            );
+        }
+        return result;
+    }
+
     public static List<Peak> findPeaksAndOffset(List<Double> data, double onset, double offset){
         List<Peak> results = new ArrayList<>();
         boolean isOnset = false;
@@ -112,6 +125,8 @@ public class Preprocessing {
                         peak.start = lastPeak;
                         peak.max = lastPeak + peakOnset;
                         peak.end = i;
+
+                        results.add(peak);
                     }
                     isOnset = false;
                 }

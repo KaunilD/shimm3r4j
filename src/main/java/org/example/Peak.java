@@ -12,6 +12,10 @@ public class Peak {
     public Peak() {
     }
 
+    public void print(){
+        Utils.print("start: " + start + ", max: " + max + ", end: " + end);
+    }
+
     public int getStart() {
         return start;
     }
