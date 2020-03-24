@@ -117,13 +117,14 @@ public class Preprocessing {
             double dat = data.get(i);
             if(isOnset){
                 if(dat <= offset ){
-                    int peakOnset = Utils.argMax(Utils.getSlice(data, lastPeak, i));
-                    if(data.get(lastPeak+peakOnset) > onset) {
+                    int peakOnsetIdx = Utils.argMax(Utils.getSlice(data, lastPeak, i));
+                    Utils.print(data.get(lastPeak+peakOnsetIdx)+"");
+                    if(data.get(lastPeak+peakOnsetIdx) >= onset) {
 
                         Peak peak = new Peak();
 
                         peak.start = lastPeak;
-                        peak.max = lastPeak + peakOnset;
+                        peak.max = lastPeak + peakOnsetIdx;
                         peak.end = i;
 
                         results.add(peak);
@@ -149,12 +150,12 @@ public class Preprocessing {
 
         List<Double> slice = Utils.broadcastSub(
                 Utils.getSlice(filteredGSR, peak.max, peak.end),
-                gsrFeatures.amplitude
+                gsrFeatures.amplitude/2.0f
         );
         int min = Utils.argMin(slice);
-
-        gsrFeatures.decayTime = (min)/sampleRate;
-        gsrFeatures.riseTime = (min + peak.max - peak.start)/sampleRate;
+        int globalMin = peak.max + min;
+        gsrFeatures.decayTime = (min - peak.max)/sampleRate;
+        gsrFeatures.riseTime = (min - peak.start)/sampleRate;
 
         return gsrFeatures;
     }

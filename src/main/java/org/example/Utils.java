@@ -155,12 +155,7 @@ public class Utils {
 
         for (String[] row : allData) {
             // 2798.5347985347985	3820.0	525935.6689453125	1.4153234E7	943922.4243164062
-            String[] values = row[0].split("\t");
-            if(values.length == 5){
-                for (int i = 0; i < NUM_COLS; i++) { // take only the first column
-                    dataFrame[i].add(Double.parseDouble(values[i]));
-                }
-            }
+            dataFrame[0].add(Double.parseDouble(row[1]));
         }
 
         return dataFrame;
