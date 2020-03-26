@@ -154,8 +154,10 @@ public class Preprocessing {
         );
         int min = Utils.argMin(slice);
         int globalMin = peak.max + min;
-        gsrFeatures.decayTime = (min - peak.max)/sampleRate;
-        gsrFeatures.riseTime = (min - peak.start)/sampleRate;
+        gsrFeatures.decayTime = (min)/sampleRate;
+        gsrFeatures.riseTime = (globalMin - peak.start)/sampleRate;
+
+        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
 
         return gsrFeatures;
     }

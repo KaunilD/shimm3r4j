@@ -12,7 +12,9 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        int SAMPLING_RATE = 50;
+        float LOWPASS_CUTOFF = 1.0f, HIGHPASS_CUTOFF = 0.05f;
+        int BUTTERWORTH_ORDER = 5;
         List<Double>[] data = Utils.readCSVData("/1585078039159_gsr.csv");
         String out = "";
         /*
@@ -31,7 +33,7 @@ public class App
         Utils.print(out);
         */
 
-        List<Double> filteredGSR = Preprocessing.butterworthLowPass(data[0], 1.0f, 50, 5);
+        List<Double> filteredGSR = Preprocessing.butterworthLowPass(data[0], LOWPASS_CUTOFF, SAMPLING_RATE, BUTTERWORTH_ORDER);
         /*
         out = "";
         for(Double d: filteredGSR ){
@@ -40,7 +42,7 @@ public class App
         Utils.print(out);
         */
 
-        filteredGSR = Preprocessing.butterworthHighPass(filteredGSR, 0.05f, 50, 5);
+        filteredGSR = Preprocessing.butterworthHighPass(filteredGSR, HIGHPASS_CUTOFF, SAMPLING_RATE, BUTTERWORTH_ORDER);
         /*
         out = "";
         for(Double d: filteredGSR ){
@@ -65,7 +67,7 @@ public class App
         Utils.print(out);
         */
 
-        filteredGSR = Preprocessing.phasicComponent(new ArrayList<Double>(filteredGSR), 50, 10);
+        filteredGSR = Preprocessing.phasicComponent(new ArrayList<Double>(filteredGSR), SAMPLING_RATE, 10);
         /*
         out = "";
         for(Double d: filteredGSR ){
@@ -81,7 +83,7 @@ public class App
         for(Peak peak : peaks) {
             out += (peak.max + ", ");
             //peak.print();
-            features.add(Preprocessing.extractGSRFeatures(filteredGSR, 10, peak));
+            features.add(Preprocessing.extractGSRFeatures(filteredGSR, 50, peak));
         }
         Utils.print(out);
 
