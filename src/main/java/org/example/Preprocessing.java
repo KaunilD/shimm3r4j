@@ -101,8 +101,13 @@ public class Preprocessing {
          */
         List<Double> result = new ArrayList<>();
         for(Double dat: data){
+            double a = 3.0/4095.0;
+            double b = a*dat;
+            double c = b/0.5;
+            double d = range_setting/(c-1);
+
             result.add(
-              range_setting/(((dat*3.0/4095.0)/0.5)-1)
+                    (1/d)*10e6
             );
         }
         return result;
@@ -157,7 +162,7 @@ public class Preprocessing {
         gsrFeatures.decayTime = (min)/sampleRate;
         gsrFeatures.riseTime = (globalMin - peak.start)/sampleRate;
 
-        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
+        //Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
 
         return gsrFeatures;
     }

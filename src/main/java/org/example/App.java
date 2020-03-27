@@ -15,7 +15,7 @@ public class App
         int SAMPLING_RATE = 50;
         float LOWPASS_CUTOFF = 1.0f, HIGHPASS_CUTOFF = 0.05f;
         int BUTTERWORTH_ORDER = 5;
-        List<Double>[] data = Utils.readCSVData("/1585078039159_gsr.csv");
+        List<Double>[] data = Utils.readCSVData("/GSR_uncalibrated_signal.csv");
         String out = "";
         /*
         for(Double d: data[0] ){
@@ -24,14 +24,14 @@ public class App
         Utils.print(out);
         */
 
-        /*
-        List<Double> gsr = Preprocessing.getGSR(data[0], 40200);
+
+        List<Double> gsr = Preprocessing.getGSR(data[0], 3300000);
         out = "";
         for(Double d: gsr ){
             out += (d.toString()+", ");
         }
         Utils.print(out);
-        */
+
 
         List<Double> filteredGSR = Preprocessing.butterworthLowPass(data[0], LOWPASS_CUTOFF, SAMPLING_RATE, BUTTERWORTH_ORDER);
         /*
@@ -85,6 +85,6 @@ public class App
             //peak.print();
             features.add(Preprocessing.extractGSRFeatures(filteredGSR, 50, peak));
         }
-        Utils.print(out);
+        //Utils.print(out);
 
     }}
