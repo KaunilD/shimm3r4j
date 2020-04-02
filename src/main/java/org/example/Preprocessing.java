@@ -157,12 +157,10 @@ public class Preprocessing {
                 Utils.getSlice(filteredGSR, peak.max, peak.end),
                 gsrFeatures.amplitude/2.0f
         );
-        int min = Utils.argMin(slice);
-        int globalMin = peak.max + min;
-        gsrFeatures.decayTime = (min)/sampleRate;
-        gsrFeatures.riseTime = (globalMin - peak.start)/sampleRate;
+        gsrFeatures.decayTime = (peak.end - peak.max)/(float)sampleRate;
+        gsrFeatures.riseTime = (peak.max - peak.start)/(float)sampleRate;
 
-        //Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
+        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
 
         return gsrFeatures;
     }
