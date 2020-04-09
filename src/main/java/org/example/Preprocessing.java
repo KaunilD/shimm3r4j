@@ -159,8 +159,8 @@ public class Preprocessing {
         );
         gsrFeatures.decayTime = (peak.end - peak.max)/(float)sampleRate;
         gsrFeatures.riseTime = (peak.max - peak.start)/(float)sampleRate;
-
-        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime);
+        gsrFeatures.scrWidth = gsrFeatures.decayTime + gsrFeatures.riseTime;
+        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime + ", " + gsrFeatures.scrWidth);
 
         return gsrFeatures;
     }
