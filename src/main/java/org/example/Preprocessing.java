@@ -123,7 +123,7 @@ public class Preprocessing {
             if(isOnset){
                 if(dat <= offset ){
                     int peakOnsetIdx = Utils.argMax(Utils.getSlice(data, lastPeak, i));
-                    Utils.print(data.get(lastPeak+peakOnsetIdx)+"");
+                    //Utils.print(data.get(lastPeak+peakOnsetIdx)+"");
                     if(data.get(lastPeak+peakOnsetIdx) >= onset) {
 
                         Peak peak = new Peak();
@@ -149,19 +149,23 @@ public class Preprocessing {
 
     public static GSRFeatures extractGSRFeatures(List<Double> filteredGSR, int sampleRate, Peak peak){
         GSRFeatures gsrFeatures = new GSRFeatures(peak);
-        gsrFeatures.riseTime = (peak.max - peak.start)/sampleRate;
-        gsrFeatures.latency = peak.start/sampleRate;
+
         gsrFeatures.amplitude = filteredGSR.get(peak.max) - filteredGSR.get(peak.start);
+        gsrFeatures.halfAmplitude = gsrFeatures.amplitude/2.0f;
+        gsrFeatures.apexValue = filteredGSR.get(peak.max);
 
         List<Double> slice = Utils.broadcastSub(
                 Utils.getSlice(filteredGSR, peak.max, peak.end),
-                gsrFeatures.amplitude/2.0f
+                gsrFeatures.halfAmplitude
         );
-        gsrFeatures.decayTime = (peak.end - peak.max)/(float)sampleRate;
-        gsrFeatures.riseTime = (peak.max - peak.start)/(float)sampleRate;
-        gsrFeatures.scrWidth = gsrFeatures.decayTime + gsrFeatures.riseTime;
-        Utils.print(gsrFeatures.riseTime + ", " + gsrFeatures.decayTime + ", " + gsrFeatures.scrWidth);
+        int min = Utils.argMin(slice);
+        gsrFeatures.halfAmplitudeIdx = peak.max + min;
 
+        gsrFeatures.riseTime = (peak.max - peak.start)/(float) sampleRate;
+        gsrFeatures.scrWidth = (gsrFeatures.halfAmplitudeIdx - peak.start)/(float) sampleRate;
+        gsrFeatures.decayTime = (gsrFeatures.halfAmplitudeIdx - peak.max)/(float) sampleRate;
+        gsrFeatures.latency = peak.start/sampleRate;
+        gsrFeatures.print();
         return gsrFeatures;
     }
 

@@ -49,10 +49,11 @@ public class App
             out += (d.toString()+", ");
         }
         Utils.print(out);
-        */
 
+
+         */
         /*
-        int downSamplingFac = 128/10;
+        int downSamplingFac = SAMPLING_RATE;
         int nsamples = filteredGSR.size()/downSamplingFac;
 
         float floatFilteredGSR[] = new float[filteredGSR.size()];
@@ -60,30 +61,31 @@ public class App
             floatFilteredGSR[i] = filteredGSR.get(i).floatValue();
         }
         filteredGSR = Preprocessing.resample(floatFilteredGSR, nsamples);
+
         out = "";
         for(Double d: filteredGSR ){
             out += (d.toString()+", ");
         }
         Utils.print(out);
         */
-
-        filteredGSR = Preprocessing.phasicComponent(new ArrayList<Double>(filteredGSR), SAMPLING_RATE, 10);
-
+        filteredGSR = Preprocessing.phasicComponent(new ArrayList<Double>(filteredGSR), SAMPLING_RATE, 1);
+        /*
         out = "";
         for(Double d: filteredGSR ){
             out += (d.toString()+", ");
         }
 
         Utils.print(out);
-
+        */
         List<Peak> peaks = Preprocessing.findPeaksAndOffset(filteredGSR, 0.001, 0);
         List<GSRFeatures> features = new ArrayList<>();
+
         out = "";
         for(Peak peak : peaks) {
             out += (peak.max + ", ");
             //peak.print();
             features.add(Preprocessing.extractGSRFeatures(filteredGSR, SAMPLING_RATE, peak));
         }
-        Utils.print(out);
+        //Utils.print(out);
 
     }}
